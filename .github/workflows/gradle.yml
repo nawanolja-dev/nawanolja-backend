@@ -34,7 +34,10 @@ jobs:
       - name: Set Application Properties
         run: |
           mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_YAML }}" | base64 --decode > src/main/resources/application.properties
+          echo "${{ secrets.APPLICATION_YAML }}" | base64 --decode > src/main/resources/application.yaml
+          echo "${{ secrets.APPLICATION_JWT_YAML }}" | base64 --decode > src/main/resources/application-jwt.yaml
+          echo "${{ secrets.APPLICATION_OAUTH_YAML }}" | base64 --decode > src/main/resources/application-oauth.yaml
+          echo "${{ secrets.APPLICATION_TEST_YAML }}" | base64 --decode > src/main/resources/application-test.yaml
           find src
 
       - name: Gradle Caching
