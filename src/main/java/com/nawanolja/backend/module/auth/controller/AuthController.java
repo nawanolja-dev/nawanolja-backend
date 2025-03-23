@@ -32,4 +32,9 @@ public class AuthController {
         return ApiResponse.created();
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "success";
+    }
+
 }
