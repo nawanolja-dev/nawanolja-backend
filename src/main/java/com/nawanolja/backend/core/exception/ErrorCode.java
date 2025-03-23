@@ -14,6 +14,7 @@ public enum ErrorCode {
     MISSING_REQUEST_FIELD("4004", "필수 입력 필드가 누락되었습니다."),
     INVALID_REQUEST_FIELD("4005", "잘못된 요청 필드입니다."),
     INVALID_CART_ITEM_QUANTITY("4006", "장바구니 아이템의 수량이 0보다 작아질 경우"),
+    UNSUPPORTED_OAUTH2_PROVIDER("4007","지원하지 않는 소셜 로그인입니다."),
 
     // 404
     NOT_FOUND("4041", "요청한 리소스를 찾을 수 없습니다."),
