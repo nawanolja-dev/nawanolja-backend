@@ -2,6 +2,7 @@ package com.nawanolja.backend.module.auth.controller;
 
 import com.nawanolja.backend.core.dto.ApiResponse;
 import com.nawanolja.backend.module.auth.application.OAuth2Service;
+import com.nawanolja.backend.module.auth.controller.dto.OAuth2CallbackResponse;
 import com.nawanolja.backend.module.auth.controller.dto.OAuth2Response;
 import com.nawanolja.backend.module.auth.domain.vo.LoginType;
 import com.nawanolja.backend.module.auth.domain.vo.OAuth2ProviderType;
@@ -24,21 +25,16 @@ public class OAuth2Controller {
 
     private final OAuth2Service oAuth2Service;
 
-    @GetMapping("/login")
-    public ResponseEntity<Void> getOAuth2LoginUrl(@RequestParam("providerType") OAuth2ProviderType providerType) {
+    @GetMapping("/authorize")
+    public ApiResponse<String> getOAuth2LoginUrl(@RequestParam("providerType") OAuth2ProviderType providerType) {
         String loginUrl = oAuth2Service.getOAuth2LoginUrl(providerType);
 
-        return ResponseEntity.status(HttpStatus.FOUND)
-            .location(URI.create(loginUrl))
-            .build();
+        return ApiResponse.ok(loginUrl);
     }
 
-    @GetMapping("/callback/{providerType}")
-    public String oauthCallback(@PathVariable(value = "providerType") LoginType providerType, @RequestParam("code") String code, HttpServletResponse servletResponse) throws IOException {
-//        OAuth2Response response = oAuth2Service.handleOAuthLogin(providerType, code);
-
-//        servletResponse.sendRedirect("https://pin-toss.com/register?email="+ response.getEmail());
-        return "Callback Success";
+    @GetMapping("/login/{providerType}")
+    public ApiResponse<OAuth2CallbackResponse> oAuthCallback(@PathVariable(value = "providerType") LoginType providerType, @RequestParam("code") String code, HttpServletResponse servletResponse) throws IOException {
+        return ApiResponse.ok(new OAuth2CallbackResponse("ACCESSTOKEN_TEST"));
     }
 }
 
