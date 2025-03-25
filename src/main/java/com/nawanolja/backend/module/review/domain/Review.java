@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,9 +23,13 @@ public class Review {
 
     private Content content;
 
-    //이건 태그를 우리가 정해놓는지? 아니면 작성자들이 하는대로 하는지 ?그럼 defence 를 어떻게 할지
-
-    private String tag;
+    @ManyToMany
+    @JoinTable(
+            name = "review_tags",
+            joinColumns = @JoinColumn(name = "review_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 
 
     //네이버 ,카카오 맵 API 어떤 거 쓸지 ?

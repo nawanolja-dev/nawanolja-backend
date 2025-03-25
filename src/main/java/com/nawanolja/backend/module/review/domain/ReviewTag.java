@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "review_tags")
 public class ReviewTag {
 
     @Id
