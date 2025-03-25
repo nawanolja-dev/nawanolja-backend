@@ -2,6 +2,7 @@ package com.nawanolja.backend.module.auth.infra.security.oauth.client;
 
 import com.nawanolja.backend.core.exception.BadRequestException;
 import com.nawanolja.backend.core.exception.ErrorCode;
+import com.nawanolja.backend.module.auth.domain.vo.OAuth2ProviderType;
 import com.nawanolja.backend.module.auth.infra.security.oauth.client.dto.NaverUserInfoResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
@@ -23,7 +24,7 @@ public class NaverApiClient {
     }
 
     public NaverUserInfoResponse getUserInfo(String accessToken) {
-        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(LoginType.NAVER.getValue());
+        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(OAuth2ProviderType.NAVER.getValue());
         if (clientRegistration == null) {
             throw new BadRequestException(ErrorCode.UNSUPPORTED_OAUTH2_PROVIDER);
         }

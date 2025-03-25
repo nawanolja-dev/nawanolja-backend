@@ -2,6 +2,7 @@ package com.nawanolja.backend.module.auth.infra.security.oauth.client;
 
 import com.nawanolja.backend.core.exception.BadRequestException;
 import com.nawanolja.backend.core.exception.ErrorCode;
+import com.nawanolja.backend.module.auth.domain.vo.OAuth2ProviderType;
 import com.nawanolja.backend.module.auth.infra.security.oauth.client.dto.KakaoUserInfoResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,7 +25,7 @@ public class KakaoApiClient {
     }
 
     public KakaoUserInfoResponse getUserInfo(String accessToken) {
-        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(LoginType.KAKAO.getValue());
+        ClientRegistration clientRegistration = clientRegistrationRepository.findByRegistrationId(OAuth2ProviderType.KAKAO.getValue());
         if(clientRegistration == null) {
             throw new BadRequestException(ErrorCode.UNSUPPORTED_OAUTH2_PROVIDER);
         }
