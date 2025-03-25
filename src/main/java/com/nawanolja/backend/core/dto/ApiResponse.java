@@ -43,4 +43,8 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> created() {
         return new ApiResponse<>(HttpStatus.CREATED, HttpStatus.CREATED.getReasonPhrase(), null);
     }
+    // 201 경우
+    public static <T> ApiResponse<T> created(T data) {
+        return new ApiResponse<>(HttpStatus.CREATED, HttpStatus.CREATED.getReasonPhrase(), data);
+    }
 }

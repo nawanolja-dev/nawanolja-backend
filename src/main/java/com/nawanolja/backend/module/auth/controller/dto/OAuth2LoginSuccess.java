@@ -1,14 +1,11 @@
 package com.nawanolja.backend.module.auth.controller.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class OAuth2CallbackResponse {
-
+public class OAuth2LoginSuccess implements OAuth2Response {
     private String accessToken;
-
 }
+
