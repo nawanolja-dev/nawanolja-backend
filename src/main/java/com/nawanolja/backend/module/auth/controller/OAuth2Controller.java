@@ -2,16 +2,11 @@ package com.nawanolja.backend.module.auth.controller;
 
 import com.nawanolja.backend.core.dto.ApiResponse;
 import com.nawanolja.backend.module.auth.application.OAuth2Service;
-import com.nawanolja.backend.module.auth.controller.dto.OAuth2CallbackResponse;
+import com.nawanolja.backend.module.auth.controller.dto.OAuth2LoginSuccess;
 import com.nawanolja.backend.module.auth.controller.dto.OAuth2Response;
-import com.nawanolja.backend.module.auth.domain.vo.LoginType;
+import com.nawanolja.backend.module.auth.controller.dto.OAuth2SignupRequired;
 import com.nawanolja.backend.module.auth.domain.vo.OAuth2ProviderType;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.net.URI;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,8 +28,19 @@ public class OAuth2Controller {
     }
 
     @GetMapping("/login/{providerType}")
-    public ApiResponse<OAuth2CallbackResponse> oAuthCallback(@PathVariable(value = "providerType") LoginType providerType, @RequestParam("code") String code, HttpServletResponse servletResponse) throws IOException {
-        return ApiResponse.ok(new OAuth2CallbackResponse("ACCESSTOKEN_TEST"));
+    public ApiResponse<OAuth2Response> oAuthCallback(@PathVariable(value = "providerType") OAuth2ProviderType providerType, @RequestParam("code") String code)  {
+
+        OAuth2Response response = oAuth2Service.handleOAuthLogin(providerType, code);
+
+        if(response instanceof OAuth2SignupRequired) {
+            OAuth2SignupRequired signupRequired = (OAuth2SignupRequired) response;
+            return ApiResponse.created(signupRequired);
+        } else if (response instanceof OAuth2LoginSuccess) {
+            OAuth2LoginSuccess loginSuccess = (OAuth2LoginSuccess) response;
+            return ApiResponse.ok(loginSuccess);
+        }
+
+        return null;
     }
 }
 

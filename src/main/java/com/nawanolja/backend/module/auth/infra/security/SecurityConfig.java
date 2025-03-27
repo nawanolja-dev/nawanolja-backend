@@ -1,5 +1,9 @@
-package com.nawanolja.backend.module.auth.security;
+package com.nawanolja.backend.module.auth.infra.security;
 
+import com.nawanolja.backend.core.util.HttpServletUtils;
+import com.nawanolja.backend.module.auth.infra.security.authentication.TokenAuthenticationProvider;
+import com.nawanolja.backend.module.auth.infra.security.jwt.JwtFilter;
+import com.nawanolja.backend.module.auth.infra.security.jwt.TokenManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,19 +12,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final TokenManager tokenManager;
+    private final HttpServletUtils servletUtils;
+    private final TokenAuthenticationProvider tokenAuthenticationProvider;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -44,6 +46,7 @@ public class SecurityConfig {
             .sessionManagement(sessionManagement ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
+            .addFilterBefore(new JwtFilter(tokenManager,servletUtils, tokenAuthenticationProvider), UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(request ->
                 request.requestMatchers("/**").permitAll()
                     .anyRequest().authenticated()
